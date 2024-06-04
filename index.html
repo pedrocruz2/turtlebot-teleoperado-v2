@@ -1,0 +1,41 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TurtleBot3 Control Interface</title>
+    <style>
+        #camera {
+            width: 640px;
+            height: 480px;
+            border: 1px solid black;
+        }
+        #controls {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>TurtleBot3 Control Interface</h1>
+    <img id="camera" src="data:image/jpeg;base64," alt="Camera Feed">
+    <div id="controls">
+        <button onclick="sendCommand('forward')">Forward</button>
+        <button onclick="sendCommand('backward')">Backward</button>
+        <button onclick="sendCommand('left')">Left</button>
+        <button onclick="sendCommand('right')">Right</button>
+        <button onclick="sendCommand('stop')">Stop</button>
+    </div>
+
+    <script>
+        let ws = new WebSocket('ws://localhost:8765');
+
+        ws.onmessage = function(event) {
+            document.getElementById('camera').src = 'data:image/jpeg;base64,' + event.data;
+        };
+
+        function sendCommand(command) {
+            ws.send(command);
+        }
+    </script>
+</body>
+</html>
